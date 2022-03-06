@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- http://logback.qos.ch/manual/layouts.html#conversionWord -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} %-5level | %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.mongodb" level="INFO"/>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <!--appender-ref ref="FILEXML"  /-->
+        <!--appender-ref ref="FILEHTML" /-->
+    </root>
+
+</configuration>
