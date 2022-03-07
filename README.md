@@ -14,7 +14,7 @@ $  mvn dependency:copy-dependencies
 start MongoDB (or simply run *start-mongodb.ps1* script.):
 
 ```
-$  mongod --directoryperdb --dbpath *<path/to/database/folder>*
+$  mongod --directoryperdb --dbpath <path/to/database/folder>
 ```
 
 now try to run programm:
