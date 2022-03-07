@@ -49,12 +49,19 @@ public class Main {
         Updater updater =
                 new Updater5m(binanceRestClient, mongoCollection, config.ticker());
 
-        if (config.export() ) {
-            updater.export();
-            LOG.debug("{}. export finished.", config.ticker());
-            System.exit(0);
+        if (config.update()) {
+            runUpdate(config, updater);
         }
 
+        if (config.export()) {
+            runExport(config, updater);
+        }
+
+        pause();
+        System.exit(0);
+    }
+
+    private static void runUpdate(Config config, Updater updater) {
         var atDay = LocalDate.now();
 
         boolean doNext = true;
@@ -66,10 +73,12 @@ public class Main {
             doNext = updater.update(atDay);
         }
 
-        LOG.info("{}. finisched with {} documents in database.",
-                config.ticker(), mongoCollection.countDocuments());
-        pause();
-        System.exit(0);
+        LOG.info("{}. update finished.", config.ticker());
+    }
+
+    private static void runExport(Config config, Updater updater) throws IOException {
+        updater.export();
+        LOG.info("{}. export finished.", config.ticker());
     }
 
     private static void pause() {

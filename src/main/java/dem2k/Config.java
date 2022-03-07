@@ -13,6 +13,9 @@ public class Config {
     @CommandLine.Option(names = "-ex",description = "export csv values.")
     private boolean export;
 
+    @CommandLine.Option(names = "-up",description = "update ticker.")
+    private boolean update;
+
     @CommandLine.Option(names = {"-?", "-h", "--help"}, description = "Display this Help Message", usageHelp = true)
     private boolean usageHelpRequested = false;
 
@@ -30,5 +33,9 @@ public class Config {
     
     public boolean export(){
         return export;
+    }
+
+    public boolean update() {
+        return update;
     }
 }
