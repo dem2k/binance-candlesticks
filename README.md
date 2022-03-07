@@ -2,6 +2,13 @@ a downloader for cryptocurrency historical date from binance.
 
 this is very alfa-version of this programm. it support now only export of 5 minutes time frame.
 
+to compile the programm you nee maven installed. run following commands:
+
+```
+~#@?  mvn clean compile
+~#@?  mvn dependency:copy-dependencies
+```
+
 to run the programm you need MongoDB installed and running befor starting download data.
 
 you can start your local MongoDB server with command
