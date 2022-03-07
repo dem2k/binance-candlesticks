@@ -2,24 +2,22 @@ a downloader for cryptocurrency historical date from binance.
 
 this is very alfa-version of this programm. it support now only export of 5 minutes time frame.
 
-to compile the programm you nee maven installed. run following commands:
+to compile and run the programm you need *maven* and *MongoDB* installed.
+
+compile and install the programm:
 
 ```
 $  mvn clean compile
 $  mvn dependency:copy-dependencies
 ```
 
-to run the programm you need MongoDB installed and running befor starting download data.
-
-you can start your local MongoDB server with command
+start MongoDB (or simply run *start-mongodb.ps1* script.):
 
 ```
 $  mongod --directoryperdb --dbpath *<path/to/database/folder>*
 ```
 
-or simply run *start-mongodb.ps1* script first.
-
-now try tu run programm with *update-candles.bat*:
+now try to run programm:
 
 ```
 $  .\update-candles.bat -?                                                                         ?  572ms ?  ? ?
