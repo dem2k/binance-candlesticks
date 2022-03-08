@@ -19,13 +19,15 @@ $  mongod --directoryperdb --dbpath <path/to/database/folder>
 now try to run programm:
 
 ```
-$  .\update-candles.bat -?                                                                         ?  572ms ?  ? ?
-Usage: <main class> [-?] [-ck] [-ex] [-up] -ti=<ticker>
--?, -h, --help     Display this Help Message
--cl            check and cleanup.
--ex            export csv values.
--ti=<ticker>   Ticker.
--up            update ticker.
+$  .\update-candles.bat -?
+Usage: <main class> [-?] [-cl] [-ex] [-up] [-ds=<decimalSeparator>] -ti=<ticker>
+  -?, -h, --help     Display this Help Message
+      -cl            check and cleanup.
+      -ds=<decimalSeparator>
+                     decimal separator. default '.'
+      -ex            export csv values.
+      -ti=<ticker>   Ticker.
+      -up            update ticker.
 ```
 
 e.x. update and export BTCUSDT data:
