@@ -1,7 +1,6 @@
 package dem2k;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 public class Utils {
