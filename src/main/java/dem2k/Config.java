@@ -13,7 +13,7 @@ public class Config {
     @CommandLine.Option(names = "-ex", description = "export data to csv-file.")
     private boolean export;
 
-    @CommandLine.Option(names = "-up", description = "update ticker.")
+    @CommandLine.Option(names = "-up", description = "update data for ticker.")
     private boolean update;
 
     @CommandLine.Option(names = "-ds", description = "decimal separator for csv-values. default '.'")
