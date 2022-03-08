@@ -11,7 +11,7 @@ $  mvn clean compile
 $  mvn dependency:copy-dependencies
 ```
 
-start MongoDB (or simply run *start-mongodb.ps1* script.):
+start MongoDB (or simply run *start-mongodb.bat* script.):
 
 ```
 $  mongod --directoryperdb --dbpath <path/to/database/folder>
