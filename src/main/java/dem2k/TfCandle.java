@@ -18,8 +18,7 @@ import com.binance.api.client.domain.market.CandlestickInterval;
 
 public class TfCandle {
 
-    private static final DateTimeFormatter dtf =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
 
     private String ticker;
     private String frame;
@@ -66,9 +65,8 @@ public class TfCandle {
     }
 
     public String toCsvValues() {
-        return "\"" + ticker + "\";\"" + frame + "\";\"" + time + "\";\"" + open + "\";\"" + high + "\";\"" + low + "\";\"" + close + "\";\"" + volume + "\"";
+        return ticker + ";" + frame + ";" + time + ";" + open + ";" + high + ";" + low + ";" + close + ";" + volume;
     }
-
 
     public String getTicker() {
         return ticker;

@@ -29,17 +29,21 @@ public abstract class Updater {
 
     public abstract void checkAndClean(LocalDate atDay);
 
-    public void export() throws IOException {
-        FindIterable<TfCandle> candles =
-                mongo.find(eq("frame", timeframe().getIntervalId()))
-                        .sort(ascending("openTime"));
-        BufferedWriter writer =
-                Files.newBufferedWriter(Paths.get(ticker + timeframe().getIntervalId() + ".csv"));
+    public void export(String decimalSeparator) throws IOException {
+        FindIterable<TfCandle> candles = mongo.find(eq("frame", timeframe().getIntervalId()))
+                .sort(ascending("openTime"));
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(ticker + timeframe().getIntervalId() + ".csv"));
+        writer.write("sep=;");
+        writer.newLine();
         writer.write(TfCandle.CSV_HEADER());
         writer.newLine();
 
         for (TfCandle candle : candles) {
-            writer.write(candle.toCsvValues());
+            String csv = candle.toCsvValues();
+            if (decimalSeparator != null) {
+                csv = csv.replace(".", decimalSeparator);
+            }
+            writer.write(csv);
             writer.newLine();
         }
         writer.close();
@@ -59,6 +63,5 @@ public abstract class Updater {
                 gte("openTime", timeFrom),
                 lte("openTime", timeTo));
     }
-
 
 }

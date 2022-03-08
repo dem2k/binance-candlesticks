@@ -76,7 +76,7 @@ public class Main {
     }
 
     private static void runExport(Config config, Updater updater) throws IOException {
-        updater.export();
+        updater.export(config.decimalseparator());
         LOG.info("{}. export finished.", config.ticker());
     }
 
