@@ -4,7 +4,7 @@ import picocli.CommandLine;
 
 public class Config {
 
-    @CommandLine.Option(names = "-ti", description = "iicker name, e.g. BTCUSDT.", required = true)
+    @CommandLine.Option(names = "-ti", description = "ticker name, e.g. BTCUSDT.", required = true)
     private String ticker;
 
     @CommandLine.Option(names = "-cl", description = "cleanup incomplete data.")
@@ -19,7 +19,7 @@ public class Config {
     @CommandLine.Option(names = "-ds", description = "decimal separator for csv-values. default '.'")
     private String decimalSeparator;
 
-    @CommandLine.Option(names = {"-?", "-h", "--help"}, description = "Display this Help Message", usageHelp = true)
+    @CommandLine.Option(names = {"-?", "-h", "--help"}, description = "display this help message.", usageHelp = true)
     private boolean usageHelpRequested = false;
 
     public String ticker() {

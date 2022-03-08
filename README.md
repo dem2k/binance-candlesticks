@@ -22,11 +22,11 @@ now try to run programm:
 $  .\update-candles.bat -?
 Usage: <main class> [-?] [-cl] [-ex] [-up] [-ds=<decimalSeparator>] -ti=<ticker>
   -?, -h, --help     Display this Help Message
-      -cl            check and cleanup.
+      -cl            cleanup incomplete data.
       -ds=<decimalSeparator>
-                     decimal separator. default '.'
-      -ex            export csv values.
-      -ti=<ticker>   Ticker.
+                     decimal separator for csv-values. default '.'
+      -ex            export data to csv-file.
+      -ti=<ticker>   ticker name, e.g. BTCUSDT.
       -up            update ticker.
 ```
 
