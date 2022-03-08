@@ -19,7 +19,7 @@ public class Config {
     @CommandLine.Option(names = "-ds", description = "decimal separator. default '.'")
     private String decimalSeparator;
 
-    @CommandLine.Option(names = { "-?", "-h", "--help" }, description = "Display this Help Message", usageHelp = true)
+    @CommandLine.Option(names = {"-?", "-h", "--help"}, description = "Display this Help Message", usageHelp = true)
     private boolean usageHelpRequested = false;
 
     public String ticker() {

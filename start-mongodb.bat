@@ -1,2 +1,2 @@
-@mkdir data > null 2>&1
+@mkdir data > nul 2>&1
 @mongod.exe --directoryperdb --dbpath data

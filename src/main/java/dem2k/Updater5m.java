@@ -1,15 +1,5 @@
 package dem2k;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.gte;
-import static com.mongodb.client.model.Filters.lte;
-import static com.mongodb.client.model.Sorts.ascending;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,9 +9,7 @@ import org.bson.conversions.Bson;
 import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
 
 public class Updater5m extends Updater {

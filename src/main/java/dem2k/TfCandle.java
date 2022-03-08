@@ -1,17 +1,8 @@
 package dem2k;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.gte;
-import static com.mongodb.client.model.Filters.lte;
-
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
-
-import org.bson.conversions.Bson;
 
 import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
