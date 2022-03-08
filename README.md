@@ -7,8 +7,7 @@ to compile and run the programm you need *maven* and *MongoDB* installed.
 compile and install the programm:
 
 ```
-$  mvn clean compile
-$  mvn dependency:copy-dependencies
+$  mvn clean package
 ```
 
 start MongoDB (or simply run *start-mongodb.bat* script.):
@@ -23,7 +22,7 @@ now try to run programm:
 $  .\update-candles.bat -?                                                                         ?  572ms ?  ? ?
 Usage: <main class> [-?] [-ck] [-ex] [-up] -ti=<ticker>
 -?, -h, --help     Display this Help Message
--ck            check and cleanup.
+-cl            check and cleanup.
 -ex            export csv values.
 -ti=<ticker>   Ticker.
 -up            update ticker.

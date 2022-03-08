@@ -1,5 +1,7 @@
 package dem2k;
 
+import static com.mongodb.client.model.Indexes.ascending;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +25,7 @@ public class Updater5m extends Updater {
         this.mongo = mongo;
         this.ticker = ticker;
         this.binance = binance;
+        this.mongo.createIndex(ascending("openTime"));
     }
 
     @Override
