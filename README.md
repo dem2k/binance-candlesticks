@@ -1,4 +1,5 @@
-a downloader for cryptocurrency historical date from binance.
+downloader for historical data from binance
+===
 
 this is very alfa-version of this programm. it support now only export of 5 minutes time frame.
 
