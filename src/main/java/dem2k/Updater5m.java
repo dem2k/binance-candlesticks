@@ -21,7 +21,7 @@ public class Updater5m extends Updater {
 
     private static final Integer LIMIT = 288; // 5*12*24
 
-    public Updater5m(BinanceApiRestClient binance, MongoCollection<TfCandle> mongo, String ticker) {
+    public Updater5m(BinanceApiRestClient binance, MongoCollection<CandleCsv> mongo, String ticker) {
         this.mongo = mongo;
         this.ticker = ticker;
         this.binance = binance;
@@ -47,8 +47,8 @@ public class Updater5m extends Updater {
             return false;
         }
 
-        List<TfCandle> documents = candles.stream()
-                .map(candle -> TfCandle.from(ticker, timeframe(), candle))
+        List<CandleCsv> documents = candles.stream()
+                .map(candle -> CandleCsv.from(ticker, timeframe(), candle))
                 .collect(Collectors.toList());
         mongo.insertMany(documents);
 

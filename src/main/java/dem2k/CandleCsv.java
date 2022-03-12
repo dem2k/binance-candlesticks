@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 
-public class TfCandle {
+public class CandleCsv {
 
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
 
@@ -26,14 +26,14 @@ public class TfCandle {
     private String takerBuyBaseAssetVolume;
     private String takerBuyQuoteAssetVolume;
 
-    public TfCandle() {
+    public CandleCsv() {
     }
 
-    public static TfCandle from(String ticker, CandlestickInterval timeFrame, Candlestick candlestick) {
-        return new TfCandle(ticker, timeFrame, candlestick);
+    public static CandleCsv from(String ticker, CandlestickInterval timeFrame, Candlestick candlestick) {
+        return new CandleCsv(ticker, timeFrame, candlestick);
     }
 
-    private TfCandle(String ticker, CandlestickInterval interval, Candlestick candlestick) {
+    private CandleCsv(String ticker, CandlestickInterval interval, Candlestick candlestick) {
         this.ticker = ticker;
         this.frame = interval.getIntervalId();
         this.time = Instant.ofEpochMilli(candlestick.getOpenTime())

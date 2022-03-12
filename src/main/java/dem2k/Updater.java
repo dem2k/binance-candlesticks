@@ -23,22 +23,22 @@ public abstract class Updater {
 
     protected String ticker;
     protected BinanceApiRestClient binance;
-    protected MongoCollection<TfCandle> mongo;
+    protected MongoCollection<CandleCsv> mongo;
 
     public abstract boolean update(LocalDate atDay);
 
     public abstract void checkAndClean(LocalDate atDay);
 
     public void export(String decimalSeparator) throws IOException {
-        FindIterable<TfCandle> candles = mongo.find(eq("frame", timeframe().getIntervalId()))
+        FindIterable<CandleCsv> candles = mongo.find(eq("frame", timeframe().getIntervalId()))
                 .sort(ascending("openTime"));
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(ticker + timeframe().getIntervalId() + ".csv"));
         writer.write("sep=;");
         writer.newLine();
-        writer.write(TfCandle.CSV_HEADER());
+        writer.write(CandleCsv.CSV_HEADER());
         writer.newLine();
 
-        for (TfCandle candle : candles) {
+        for (CandleCsv candle : candles) {
             String csv = candle.toCsvValues();
             if (decimalSeparator != null) {
                 csv = csv.replace(".", decimalSeparator);

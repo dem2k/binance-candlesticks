@@ -42,8 +42,8 @@ public class Main {
                 .codecRegistry(codecRegistry).build();
         MongoDatabase mongoDatabase =
                 MongoClients.create(mongoClientSettings).getDatabase(MONGO_DATABASE);
-        MongoCollection<TfCandle> mongoCollection =
-                mongoDatabase.getCollection(config.ticker(), TfCandle.class);
+        MongoCollection<CandleCsv> mongoCollection =
+                mongoDatabase.getCollection(config.ticker(), CandleCsv.class);
 
         Updater updater =
                 new Updater5m(binanceRestClient, mongoCollection, config.ticker());
