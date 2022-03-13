@@ -226,3 +226,4 @@ gradle-app.setting
 /data/
 /*.csv
 /-*
+/.vscode
