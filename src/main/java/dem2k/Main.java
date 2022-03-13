@@ -14,7 +14,6 @@ import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import picocli.CommandLine;
 
@@ -44,7 +43,7 @@ public class Main {
         MongoDatabase mongoDatabase =
                 MongoClients.create(mongoClientSettings).getDatabase(MONGO_DATABASE);
 
-        UpdaterFactory updaterFactory = 
+        UpdaterFactory updaterFactory =
                 new UpdaterFactory(binanceRestClient, mongoDatabase, config);
         List<Updater> updaters = updaterFactory.getUpdaters();
         for (Updater updater : updaters) {
