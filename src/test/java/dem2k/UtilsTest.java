@@ -22,7 +22,7 @@ public class UtilsTest {
     public void testFromTo() {
         var atDay = LocalDate.of(2021, 8, 15)
                 .atStartOfDay(ZoneId.of("GMT")).toLocalDate();
-        long from = Utils.toUnixTime(atDay);
+        long from = Utils.toUnixTime0000(atDay);
         long to = Utils.toUnixTime2359(atDay);
         long result = to - from;
         Assert.assertEquals(86399000, result);
