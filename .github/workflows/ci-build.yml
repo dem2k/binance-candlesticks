@@ -28,5 +28,4 @@ jobs:
         automatic_release_tag: "latest"
         prerelease: true
         title: "Development Build"
-        files: |
-          target/*-all.jar
+        files: "target/*-all.jar"
