@@ -29,4 +29,4 @@ jobs:
         prerelease: true
         title: "Development Build"
         files: |
-          *.jar
+          target/*-all.jar
