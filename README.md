@@ -21,14 +21,16 @@ now try to run programm:
 
 ```
 $  .\update-candles.bat -?
-Usage: <main class> [-?] [-cl] [-ex] [-up] [-ds=<decimalSeparator>] -ti=<ticker>
-  -?, -h, --help     display this help message.
-      -cl            cleanup incomplete data.
+Usage: <main class> [-?] [-cl] [-ex] [-up] [-ds=<decimalSeparator>]
+                    -ti=<ticker> [-tf=<timeframes>]...
+  -?, -h, --help         display this help message.
+      -cl                cleanup incomplete data.
       -ds=<decimalSeparator>
-                     decimal separator for csv-values. default '.'
-      -ex            export data to csv-file.
-      -ti=<ticker>   ticker name, e.g. BTCUSDT.
-      -up            update data for ticker.
+                         decimal separator for csv-values. default '.'
+      -ex                export data to csv-file.
+      -tf=<timeframes>   timeframe. now support only 1m and 5m. default '1m'
+      -ti=<ticker>       ticker name, e.g. BTCUSDT.
+      -up                update data for ticker.
 ```
 
 e.x. update and export BTCUSDT data:

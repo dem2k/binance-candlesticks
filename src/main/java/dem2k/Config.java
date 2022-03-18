@@ -1,5 +1,13 @@
 package dem2k;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.binance.api.client.domain.market.CandlestickInterval;
 import picocli.CommandLine;
 
 public class Config {
@@ -17,7 +25,10 @@ public class Config {
     private boolean update;
 
     @CommandLine.Option(names = "-ds", description = "decimal separator for csv-values. default '.'")
-    private String decimalSeparator;
+    private Character decimalSeparator = '.';
+
+    @CommandLine.Option(names = "-tf", description = "timeframe. now support only 1m and 5m. default '1m'")
+    private List<String> timeframes = List.of("1m");
 
     @CommandLine.Option(names = {"-?", "-h", "--help"}, description = "display this help message.", usageHelp = true)
     private boolean usageHelpRequested = false;
@@ -42,8 +53,11 @@ public class Config {
         return update;
     }
 
-    public String decimalseparator() {
+    public Character decimalseparator() {
         return decimalSeparator;
     }
 
+    public List<String> timeframes() {
+        return timeframes;
+    }
 }
