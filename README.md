@@ -1,7 +1,7 @@
 downloader for historical data from binance
 ===
 
-this is very alfa-version of this programm. it support now only export of 5 minutes time frame.
+this is very alfa-version of this programm. it support now only export of 1 and 5 minutes time frame.
 
 to compile and run the programm you need *maven* and *MongoDB* installed.
 
