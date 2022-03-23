@@ -39,7 +39,7 @@ e.x. update and export BTCUSDT data:
  $  .\update-candles.bat -ti btcusdt -up -ex  
 ```
 
-when programm finished a file BTCUSDT5m.csv is stored in current directory. content are all 1m candles like this:
+when programm finished a file BTCUSDT.csv is stored in current directory. content are all candles like this:
 
 ```
 TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME
