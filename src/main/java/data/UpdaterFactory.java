@@ -1,4 +1,4 @@
-package dem2k;
+package data;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,12 +9,12 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 public class UpdaterFactory {
+    private AppConfig config;
+    private MongoDatabase mongoDatabase;
     private BinanceApiRestClient binanceRestClient;
-    private final MongoDatabase mongoDatabase;
-    private final Config config;
     private List<CandlestickInterval> timeframes;
 
-    public UpdaterFactory(BinanceApiRestClient binanceRestClient, MongoDatabase mongoDatabase, Config config) {
+    public UpdaterFactory(BinanceApiRestClient binanceRestClient, MongoDatabase mongoDatabase, AppConfig config) {
         this.binanceRestClient = binanceRestClient;
         this.mongoDatabase = mongoDatabase;
         this.config = config;

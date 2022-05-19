@@ -1,4 +1,4 @@
-package dem2k;
+package data;
 
 import java.time.Instant;
 import java.time.ZoneId;

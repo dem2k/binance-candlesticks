@@ -1,16 +1,10 @@
-package dem2k;
+package data;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import com.binance.api.client.domain.market.CandlestickInterval;
 import picocli.CommandLine;
 
-public class Config {
+public class AppConfig {
 
     @CommandLine.Option(names = "-ti", description = "ticker name, e.g. BTCUSDT.", required = true)
     private String ticker;

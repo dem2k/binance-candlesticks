@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <name>dem2k</name>
+    <name>data</name>
 
     <dependencies>
         <dependency>
@@ -66,11 +66,11 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>dem2k.Main</mainClass>
-                        </manifest>
-                    </archive>
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <mainClass>data.AppMain</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>

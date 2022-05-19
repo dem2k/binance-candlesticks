@@ -1,4 +1,4 @@
-package dem2k;
+package data;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -15,13 +15,11 @@ import java.time.LocalDate;
 
 import org.bson.conversions.Bson;
 
-import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 public abstract class Updater {
-
 
     public abstract boolean update(LocalDate atDay);
 
@@ -31,25 +29,25 @@ public abstract class Updater {
 
     public abstract String ticker();
 
-    public void export(Character decimalSeparator) throws IOException {
-        FindIterable<CandleCsv> candles = mongo().find(eq("frame", timeframe().getIntervalId()))
-                .sort(descending("openTime"));
-        BufferedWriter writer = Files.newBufferedWriter(Paths.get(ticker() + timeframe().getIntervalId() + ".csv"));
-        writer.write("sep=;");
-        writer.newLine();
-        writer.write(CandleCsv.CSV_HEADER());
-        writer.newLine();
-
-        for (CandleCsv candle : candles) {
-            String csv = candle.toCsvValues();
-            if (decimalSeparator != null&& !decimalSeparator.equals('.')) {
-                csv = csv.replace('.', decimalSeparator);
-            }
-            writer.write(csv);
-            writer.newLine();
-        }
-        writer.close();
-    }
+//    public void export(Character decimalSeparator) throws IOException {
+//        FindIterable<CandleCsv> candles = mongo().find(eq("frame", timeframe().getIntervalId()))
+//                .sort(descending("openTime"));
+//        BufferedWriter writer = Files.newBufferedWriter(Paths.get(ticker() + timeframe().getIntervalId() + ".csv"));
+//        writer.write("sep=;");
+//        writer.newLine();
+//        writer.write(CandleCsv.CSV_HEADER());
+//        writer.newLine();
+//
+//        for (CandleCsv candle : candles) {
+//            String csv = candle.toCsvValues();
+//            if (decimalSeparator != null&& !decimalSeparator.equals('.')) {
+//                csv = csv.replace('.', decimalSeparator);
+//            }
+//            writer.write(csv);
+//            writer.newLine();
+//        }
+//        writer.close();
+//    }
 
     public abstract CandlestickInterval timeframe();
 

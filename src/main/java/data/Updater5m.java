@@ -1,4 +1,4 @@
-package dem2k;
+package data;
 
 import static com.mongodb.client.model.Indexes.ascending;
 

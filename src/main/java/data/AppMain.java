@@ -1,4 +1,4 @@
-package dem2k;
+package data;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
@@ -14,19 +14,20 @@ import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import picocli.CommandLine;
 
-public class Main {
+public class AppMain {
 
     private static final org.slf4j.Logger LOG =
-            org.slf4j.LoggerFactory.getLogger(Main.class);
+            org.slf4j.LoggerFactory.getLogger(AppMain.class);
 
     public static final String MONGO_DATABASE = "binance";
 
     public static void main(String[] args) throws IOException {
 
-        var config = CommandLine.populateCommand(new Config(), args);
+        var config = CommandLine.populateCommand(new AppConfig(), args);
         if (config.isUsageHelpRequested()) {
             CommandLine.usage(config, System.out);
             return;
@@ -46,21 +47,27 @@ public class Main {
         UpdaterFactory updaterFactory =
                 new UpdaterFactory(binanceRestClient, mongoDatabase, config);
         List<Updater> updaters = updaterFactory.getUpdaters();
+
         for (Updater updater : updaters) {
             if (config.update()) {
-                runUpdate(updater, config);
+                update(updater, config);
+            }
+        }
+
+        List<Exporter> exporters = createExporters(mongoDatabase,config);
+
+        for (Exporter exporter : exporters) {
+            if (config.export()) {
+                export(exporter, config);
             }
 
-            if (config.export()) {
-                runExport(updater, config);
-            }
         }
 
         pause();
         System.exit(0);
     }
 
-    private static void runUpdate(Updater updater, Config config) {
+    private static void update(Updater updater, AppConfig config) {
         var atDay = LocalDate.now();
 
         boolean doNext = true;
@@ -75,9 +82,16 @@ public class Main {
         LOG.info("{}. update finished.", config.ticker());
     }
 
-    private static void runExport(Updater updater, Config config) throws IOException {
-        updater.export(config.decimalseparator());
+    private static void export(Exporter exporter, AppConfig config) throws IOException {
+        exporter.export(config.decimalseparator());
         LOG.info("{}. export finished.", config.ticker());
+    }
+
+    private static List<Exporter> createExporters(MongoDatabase mongoDatabase, AppConfig config) {
+        MongoCollection<CandleCsv> data =
+                mongoDatabase.getCollection(config.ticker() + "1m", CandleCsv.class);
+
+        return List.of(new Exporter1m(data,config.ticker()));
     }
 
     private static void pause() {
