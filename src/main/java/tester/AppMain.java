@@ -1,7 +1,5 @@
 package tester;
 
-import java.nio.file.Path;
-
 import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.domain.general.ExchangeInfo;
@@ -41,7 +39,7 @@ public class AppMain {
 
         Utils utils = new Utils(symbolInfo);
         Wallet wallet = new Wallet(config.baseAsset(), config.quotAsset());
-        CandleStreamer candles = 
+        CandleStreamer candles =
                 new CandleStreamer(config.csvFile(), utils);
         Grid grid = createGrid(candles.startPrice(), config.gridLowestPrice(), config.gridHighestPrice(), config.gridStepFactor(), utils);
         TvChart tvChart = new TvChart1h(grid, utils);
@@ -62,7 +60,7 @@ public class AppMain {
                 printFooter(wallet, candle.close());
             }
         }
-        
+
         strategy.finish();
         tvChart.save(config.csvFileWithoutExt() + ".html");
 

@@ -3,6 +3,7 @@ package tester;
 import java.util.Objects;
 
 public class Order {
+    
     private double price;
     private OrderType side;
 
