@@ -88,12 +88,4 @@ public class AppMain {
         return List.of(new Exporter1m(data, config.ticker()));
     }
 
-    private static void pause() {
-        try {
-            Thread.sleep(1000);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }

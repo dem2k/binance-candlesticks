@@ -7,12 +7,10 @@
         </encoder>
     </appender>
 
-    <logger name="org.mongodb" level="INFO"/>
+    <logger name="org.mongodb" level="WARN"/>
 
     <root level="debug">
         <appender-ref ref="STDOUT"/>
-        <!--appender-ref ref="FILEXML"  /-->
-        <!--appender-ref ref="FILEHTML" /-->
     </root>
 
 </configuration>

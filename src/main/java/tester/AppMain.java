@@ -45,16 +45,16 @@ public class AppMain {
         var symbolInfo =
                 binance.getExchangeInfo().getSymbolInfo(config.ticker());
 
-        CommonUtils utils = new CommonUtils(symbolInfo);
-        Wallet wallet = new Wallet(config.baseAsset(), config.quotAsset());
+        var utils = new CommonUtils(symbolInfo);
+        var wallet = new Wallet(config.baseAsset(), config.quotAsset());
 
         List<CandleGnr> candles = getCandlesFromMongo(utils);
 
-        Grid grid = createGrid(getFirstOpen(candles), config.gridLowestPrice(), config.gridHighestPrice(), config.gridStepFactor(), utils);
-        TvChart tvChart = new TvChart1h(grid, utils);
-        Strategy strategy = new Strategy(grid, wallet, tvChart, utils);
+        var grid = createGrid(getFirstOpen(candles), config.gridLowestPrice(), config.gridHighestPrice(), config.gridStepFactor(), utils);
+        var tvChart = new TvChart1h(grid, utils);
+        var strategy = new Strategy(grid, wallet, tvChart, utils);
 
-        for (CandleGnr candle : candles) {
+        for (var candle : candles) {
             tvChart.update(candle);
             strategy.process(candle);
             wallet.updatePnl(candle);
@@ -69,7 +69,7 @@ public class AppMain {
         }
 
         strategy.finish();
-        tvChart.save(config.ticker() + "-grid-test.html");
+        tvChart.save(config.ticker() + "1h-grid-test.html");
 
         if (!config.verbose()) {
             String summary = wallet.summary(getLastClose(candles));
@@ -78,13 +78,13 @@ public class AppMain {
     }
 
     private double getFirstOpen(List<CandleGnr> candles) {
-        CandleGnr candle =
+        var candle =
                 candles.stream().min(Comparator.comparing(CandleGnr::time)).orElseThrow();
         return candle.open();
     }
 
     private double getLastClose(List<CandleGnr> candles) {
-        CandleGnr candle =
+        var candle =
                 candles.stream().max(Comparator.comparing(CandleGnr::time)).orElseThrow();
         return candle.close();
     }
@@ -96,15 +96,20 @@ public class AppMain {
         FindIterable<CandleCsv> candles = data.find(eq("frame", "1m"))
                 .sort(ascending("openTime"));
 
+        long counter = 0;
+        System.out.print("Reading Database...");
         List<CandleGnr> result = new ArrayList<>();
-        for (CandleCsv csvCndl : candles) {
+        for (var candle : candles) {
             // TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME
-            String csvLine = csvCndl.getTicker() + ";" + csvCndl.getFrame() + ";" + csvCndl.getTime()
-                    + ";" + csvCndl.getOpen() + ";" + csvCndl.getHigh() + ";" + csvCndl.getLow()
-                    + ";" + csvCndl.getClose() + ";" + csvCndl.getVolume();
+            var csvLine = candle.getTicker() + ";" + candle.getFrame() + ";" + candle.getTime()
+                    + ";" + candle.getOpen() + ";" + candle.getHigh() + ";" + candle.getLow()
+                    + ";" + candle.getClose() + ";" + candle.getVolume();
             result.add(CandleGnr.from(csvLine, utils));
+            if (counter++ % 10000 == 0) {
+                System.out.print(".");
+            }
         }
-
+        System.out.println("done.");
         return result;
     }
 
