@@ -1,6 +1,6 @@
 package tester;
 
-import common.Utils;
+import common.CommonUtils;
 
 public class Wallet {
 
@@ -71,9 +71,9 @@ public class Wallet {
                           FEE: %10.2f  TOTAL: %10.2f %s
                           MIN: %10.2f    MAX: %10.2f %s
                         """
-                , baseName(), baseAmnt(), quoteName(), quoteAmnt(), Utils.ERASE_LINE
-                , totalPayedFee(), totalAt(price), Utils.ERASE_LINE
-                , totalMin, totalMax, Utils.ERASE_LINE);
+                , baseName(), baseAmnt(), quoteName(), quoteAmnt(), CommonUtils.ERASE_LINE
+                , totalPayedFee(), totalAt(price), CommonUtils.ERASE_LINE
+                , totalMin, totalMax, CommonUtils.ERASE_LINE);
     }
 
 

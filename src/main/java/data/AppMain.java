@@ -16,16 +16,17 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import common.MongoUtils;
 import picocli.CommandLine;
 
 public class AppMain {
 
     private static final org.slf4j.Logger LOG =
             org.slf4j.LoggerFactory.getLogger(AppMain.class);
+    
+    private AppConfig config;
 
-    public static final String MONGO_DATABASE = "binance";
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         var config = CommandLine.populateCommand(new AppConfig(), args);
         if (config.isUsageHelpRequested()) {
@@ -33,41 +34,39 @@ public class AppMain {
             return;
         }
 
-        BinanceApiClientFactory binanceClientFactory =
-                BinanceApiClientFactory.newInstance();
-        BinanceApiRestClient binanceRestClient = binanceClientFactory.newRestClient();
+        var app = new AppMain(config);
+        app.start();
+        System.exit(0);
+    }
 
-        CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-                .codecRegistry(codecRegistry).build();
-        MongoDatabase mongoDatabase =
-                MongoClients.create(mongoClientSettings).getDatabase(MONGO_DATABASE);
+    public AppMain(AppConfig config) {
+        this.config = config;
+    }
 
-        UpdaterFactory updaterFactory =
-                new UpdaterFactory(binanceRestClient, mongoDatabase, config);
-        List<Updater> updaters = updaterFactory.getUpdaters();
+    private void start() throws Exception {
+        MongoDatabase database = MongoUtils.mongoDatabase();
 
-        for (Updater updater : updaters) {
-            if (config.update()) {
+        if (config.update()) {
+            var binance =
+                    BinanceApiClientFactory.newInstance().newRestClient();
+            var updaterFactory =
+                    new UpdaterFactory(binance, database, config);
+            List<Updater> updaters = updaterFactory.getUpdaters();
+            for (Updater updater : updaters) {
                 update(updater, config);
             }
         }
 
-        List<Exporter> exporters = createExporters(mongoDatabase, config);
-
-        for (Exporter exporter : exporters) {
-            if (config.export()) {
-                export(exporter, config);
+        if (config.export()) {
+            List<Exporter> exporters = createExporters(database, config);
+            for (Exporter exporter : exporters) {
+                exporter.export(config.decimalseparator());
+                LOG.info("{}. export finished.", config.ticker());
             }
-
         }
-
-        pause();
-        System.exit(0);
     }
 
-    private static void update(Updater updater, AppConfig config) {
+    private void update(Updater updater, AppConfig config) {
         var atDay = LocalDate.now();
 
         boolean doNext = true;
@@ -82,12 +81,7 @@ public class AppMain {
         LOG.info("{}. update finished.", config.ticker());
     }
 
-    private static void export(Exporter exporter, AppConfig config) throws IOException {
-        exporter.export(config.decimalseparator());
-        LOG.info("{}. export finished.", config.ticker());
-    }
-
-    private static List<Exporter> createExporters(MongoDatabase mongoDatabase, AppConfig config) {
+    private List<Exporter> createExporters(MongoDatabase mongoDatabase, AppConfig config) {
         MongoCollection<CandleCsv> data =
                 mongoDatabase.getCollection(config.ticker() + "1m", CandleCsv.class);
 

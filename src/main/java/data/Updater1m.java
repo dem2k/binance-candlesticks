@@ -13,7 +13,7 @@ import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
-import common.Utils;
+import common.CommonUtils;
 
 public class Updater1m extends Updater {
     
@@ -41,13 +41,13 @@ public class Updater1m extends Updater {
             return true;
         }
 
-        long timeFr00 = Utils.toUnixTime0000(atDay);
-        long timeTo12 = Utils.toUnixTime1159(atDay);
+        long timeFr00 = CommonUtils.toUnixTime0000(atDay);
+        long timeTo12 = CommonUtils.toUnixTime1159(atDay);
 
         boolean extracted1 = extracted(atDay, timeFr00, timeTo12,"AM");
 
-        long timeFr12 = Utils.toUnixTime1200(atDay);
-        long timeTo24 = Utils.toUnixTime2359(atDay);
+        long timeFr12 = CommonUtils.toUnixTime1200(atDay);
+        long timeTo24 = CommonUtils.toUnixTime2359(atDay);
 
         boolean extracted2 = extracted(atDay, timeFr12, timeTo24, "PM");
 

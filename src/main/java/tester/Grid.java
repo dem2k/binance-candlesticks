@@ -5,15 +5,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import common.Utils;
+import common.CommonUtils;
 
 public class Grid {
 
-    private Utils utils;
+    private CommonUtils utils;
     private List<Order> orders;
     private String boFormat, soFormat, prFormat;
 
-    private Grid(List<Order> orders, Utils utils) {
+    private Grid(List<Order> orders, CommonUtils utils) {
         this.orders = orders;
         this.utils = utils;
         soFormat = "------- %10." + utils.tickSize() + "f";
@@ -21,7 +21,7 @@ public class Grid {
         boFormat = "+++++++ %10." + utils.tickSize() + "f";
     }
 
-    public static GridBuilder builder(Utils utils, double priceFrom) {
+    public static GridBuilder builder(CommonUtils utils, double priceFrom) {
         return new GridBuilder(utils, priceFrom);
     }
 
@@ -54,10 +54,10 @@ public class Grid {
 
     public static class GridBuilder {
         private List<Order> orders = new ArrayList<>();
-        private Utils utils;
+        private CommonUtils utils;
         private double priceFrom;
 
-        public GridBuilder(Utils utils, double priceFrom) {
+        public GridBuilder(CommonUtils utils, double priceFrom) {
             this.utils = utils;
             this.priceFrom = priceFrom;
         }
@@ -84,18 +84,18 @@ public class Grid {
                 .sorted(Comparator.comparing(Order::price).reversed())
                 .forEach(order -> {
                     screen.append(String.format(soFormat, order.price()))
-                            .append(Utils.ERASE_LINE).append("\n");
+                            .append(CommonUtils.ERASE_LINE).append("\n");
                 });
 
         screen.append(String.format(prFormat, price))
-                .append(Utils.ERASE_LINE).append("\n");
+                .append(CommonUtils.ERASE_LINE).append("\n");
 
         orders().stream()
                 .filter(order -> order.price() <= price)
                 .sorted(Comparator.comparing(Order::price).reversed())
                 .forEach(order -> {
                     screen.append(String.format(boFormat, order.price()))
-                            .append(Utils.ERASE_LINE).append("\n");
+                            .append(CommonUtils.ERASE_LINE).append("\n");
                 });
         return screen.toString();
     }

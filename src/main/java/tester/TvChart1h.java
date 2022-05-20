@@ -13,11 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import common.Utils;
+import common.CommonUtils;
 
 public class TvChart1h implements TvChart {
 
-    private Utils utils;
+    private CommonUtils utils;
 
     private List<String> markers = new ArrayList<>();
     private List<String> gridLines = new ArrayList<>();
@@ -26,7 +26,7 @@ public class TvChart1h implements TvChart {
 
     private String last = "";
 
-    public TvChart1h(final Grid grid, final Utils utils) {
+    public TvChart1h(final Grid grid, final CommonUtils utils) {
         this.utils = utils;
         gridLines.addAll(grid.orders().stream()
                 .sorted(Comparator.comparing(Order::price))

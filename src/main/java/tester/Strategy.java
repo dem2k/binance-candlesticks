@@ -1,13 +1,13 @@
 package tester;
 
-import common.Utils;
+import common.CommonUtils;
 
 public class Strategy {
     
     private Grid grid;
     private Wallet wallet;
     private TvChart tvChart;
-    private Utils utils;
+    private CommonUtils utils;
 
     private double leoPrice = 0;
 
@@ -16,7 +16,7 @@ public class Strategy {
     private static final org.slf4j.Logger LOG =
             org.slf4j.LoggerFactory.getLogger(Strategy.class);
 
-    public Strategy(Grid grid, Wallet wallet, TvChart tvChart, Utils utils) {
+    public Strategy(Grid grid, Wallet wallet, TvChart tvChart, CommonUtils utils) {
         this.grid = grid;
         this.wallet = wallet;
         this.tvChart = tvChart;

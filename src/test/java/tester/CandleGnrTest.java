@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.binance.api.client.domain.general.FilterType;
 import com.binance.api.client.domain.general.SymbolFilter;
 import com.binance.api.client.domain.general.SymbolInfo;
-import common.Utils;
+import common.CommonUtils;
 
 
 public class CandleGnrTest {
@@ -23,7 +23,7 @@ public class CandleGnrTest {
         SymbolInfo sym = new SymbolInfo();
         List<SymbolFilter> filters = List.of(filter);
         sym.setFilters(filters);
-        Utils utils = new Utils(sym);
+        CommonUtils utils = new CommonUtils(sym);
 
         // TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME
         CandleGnr candle =
@@ -42,7 +42,7 @@ public class CandleGnrTest {
         SymbolInfo sym = new SymbolInfo();
         List<SymbolFilter> filters = List.of(filter);
         sym.setFilters(filters);
-        Utils utils = new Utils(sym);
+        CommonUtils utils = new CommonUtils(sym);
 
         CandleGnr candle =
                 CandleGnr.from("BTCUSDT;1m;2022-03-19T23-53;0.0;20.0;30.0;50.0;0.0", utils);

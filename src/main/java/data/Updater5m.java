@@ -13,7 +13,7 @@ import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
-import common.Utils;
+import common.CommonUtils;
 
 public class Updater5m extends Updater {
 
@@ -40,8 +40,8 @@ public class Updater5m extends Updater {
             return true;
         }
 
-        long timeFrom = Utils.toUnixTime0000(atDay);
-        long timeTo = Utils.toUnixTime2359(atDay);
+        long timeFrom = CommonUtils.toUnixTime0000(atDay);
+        long timeTo = CommonUtils.toUnixTime2359(atDay);
 
         List<Candlestick> candles =
                 binance.getCandlestickBars(ticker, timeframe(), LIMIT, timeFrom, timeTo);

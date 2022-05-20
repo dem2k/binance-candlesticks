@@ -10,11 +10,11 @@ import org.junit.Test;
 import com.binance.api.client.domain.general.FilterType;
 import com.binance.api.client.domain.general.SymbolFilter;
 import com.binance.api.client.domain.general.SymbolInfo;
-import common.Utils;
+import common.CommonUtils;
 
 public class GridTest {
     
-    private Utils getUtilsBtc(){
+    private CommonUtils getUtilsBtc(){
         SymbolFilter filter = new SymbolFilter();
         filter.setFilterType(FilterType.PRICE_FILTER);
         filter.setTickSize("0.01000000");
@@ -22,7 +22,7 @@ public class GridTest {
         SymbolInfo sym = new SymbolInfo();
         List<SymbolFilter> filters = List.of(filter);
         sym.setFilters(filters);
-        Utils utils = new Utils(sym);
+        CommonUtils utils = new CommonUtils(sym);
         return utils;
     }
 
@@ -65,7 +65,7 @@ public class GridTest {
         SymbolInfo sym = new SymbolInfo();
         List<SymbolFilter> filters = List.of(filter);
         sym.setFilters(filters);
-        Utils utils = new Utils(sym);
+        CommonUtils utils = new CommonUtils(sym);
 
         assertEquals(4, utils.tickSize());
 

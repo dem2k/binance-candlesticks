@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import common.Utils;
+import common.CommonUtils;
 
 public class TvChart1m implements TvChart {
 
-    private Utils utils;
+    private CommonUtils utils;
 
     private List<String> markers = new ArrayList<>();
     private List<String> gridLines = new ArrayList<>();
@@ -23,7 +23,7 @@ public class TvChart1m implements TvChart {
 
     private String last = "";
 
-    public TvChart1m(final Grid grid, final Utils utils) {
+    public TvChart1m(final Grid grid, final CommonUtils utils) {
         this.utils = utils;
         gridLines.addAll(grid.orders().stream()
                 .sorted(Comparator.comparing(Order::price))

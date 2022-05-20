@@ -2,45 +2,33 @@ package tester;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Sorts.ascending;
-import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
-import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
-
 import com.binance.api.client.BinanceApiClientFactory;
-import com.binance.api.client.BinanceApiRestClient;
-import com.binance.api.client.domain.general.ExchangeInfo;
-import com.binance.api.client.domain.general.SymbolInfo;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import common.CommonUtils;
+import common.MongoUtils;
 import data.CandleCsv;
-import common.Utils;
 import picocli.CommandLine;
 
 public class AppMain {
-
-    public static final String MONGO_DATABASE = "binance";
 
     private AppConfig config;
 
     // ANSI ESC-SEQ:  https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
     public static void main(String[] args) throws Exception {
 
-        AppConfig config = CommandLine.populateCommand(new AppConfig(), args);
+        var config = CommandLine.populateCommand(new AppConfig(), args);
         if (config.isUsageHelpRequested()) {
             CommandLine.usage(config, System.out);
             return;
         }
 
-        AppMain main = new AppMain(config);
+        var main = new AppMain(config);
         main.start();
         System.exit(0);
     }
@@ -51,14 +39,13 @@ public class AppMain {
 
     private void start() throws Exception {
 
-        BinanceApiClientFactory binanceClientFactory =
-                BinanceApiClientFactory.newInstance();
-        BinanceApiRestClient binanceRestClient = binanceClientFactory.newRestClient();
+        var binance =
+                BinanceApiClientFactory.newInstance().newRestClient();
 
-        ExchangeInfo exchangeInfo = binanceRestClient.getExchangeInfo();
-        SymbolInfo symbolInfo = exchangeInfo.getSymbolInfo(config.ticker());
+        var symbolInfo =
+                binance.getExchangeInfo().getSymbolInfo(config.ticker());
 
-        Utils utils = new Utils(symbolInfo);
+        CommonUtils utils = new CommonUtils(symbolInfo);
         Wallet wallet = new Wallet(config.baseAsset(), config.quotAsset());
 
         List<CandleGnr> candles = getCandlesFromMongo(utils);
@@ -102,16 +89,9 @@ public class AppMain {
         return candle.close();
     }
 
-    private List<CandleGnr> getCandlesFromMongo(Utils utils) {
-        CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-                .codecRegistry(codecRegistry).build();
-        MongoDatabase mongoDatabase =
-                MongoClients.create(mongoClientSettings).getDatabase(MONGO_DATABASE);
-
+    private List<CandleGnr> getCandlesFromMongo(CommonUtils utils) {
         MongoCollection<CandleCsv> data =
-                mongoDatabase.getCollection(config.ticker() + "1m", CandleCsv.class);
+                MongoUtils.mongoDatabase().getCollection(config.ticker() + "1m", CandleCsv.class);
 
         FindIterable<CandleCsv> candles = data.find(eq("frame", "1m"))
                 .sort(ascending("openTime"));
@@ -128,7 +108,8 @@ public class AppMain {
         return result;
     }
 
-    private Grid createGrid(double price, double from, double to, double step, Utils utils) {
+
+    private Grid createGrid(double price, double from, double to, double step, CommonUtils utils) {
         Grid.GridBuilder builder = Grid.builder(utils, price);
         while (from <= to) {
             builder.add(from);
@@ -138,20 +119,20 @@ public class AppMain {
     }
 
     private static void cursorHome() {
-        System.out.print(Utils.HOME);
+        System.out.print(CommonUtils.HOME);
     }
 
     private static void printFooter(Wallet wallet, double price) {
         StringBuilder footer = new StringBuilder();
         footer.append(wallet.summary(price));
-        footer.append(Utils.ERASE_LINE).append("\n");
+        footer.append(CommonUtils.ERASE_LINE).append("\n");
         System.out.println(footer);
     }
 
     private static void printHeader(CandleGnr candle) {
         StringBuilder header = new StringBuilder();
         header.append("=== GRID === ").append(candle.time()).append(" ==========");
-        header.append(Utils.ERASE_LINE);
+        header.append(CommonUtils.ERASE_LINE);
         System.out.println(header);
     }
 
@@ -159,7 +140,7 @@ public class AppMain {
         double price = candle.hlc3();
         StringBuilder screen = new StringBuilder();
         screen.append(grid.summary(price));
-        screen.append("========================================").append(Utils.ERASE_LINE);
+        screen.append("========================================").append(CommonUtils.ERASE_LINE);
         System.out.println(screen);
     }
 

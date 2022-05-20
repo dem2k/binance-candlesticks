@@ -8,7 +8,7 @@ import com.binance.api.client.domain.general.SymbolFilter;
 import com.binance.api.client.domain.general.SymbolInfo;
 import tester.Order;
 
-public class Utils {
+public class CommonUtils {
 
     public static final String HOME = "\033[1;1H";
     public static String ERASE_LINE = "\033[K";
@@ -16,7 +16,7 @@ public class Utils {
 
     private SymbolInfo symbolInfo;
 
-    public Utils(SymbolInfo symbolInfo) {
+    public CommonUtils(SymbolInfo symbolInfo) {
         this.symbolInfo = symbolInfo;
     }
 
@@ -124,6 +124,5 @@ public class Utils {
     public static String orderPrettyString(Order order) {
         return String.format("--- %4s @ %s               #%n", order.side(), order.price());
     }
-
 
 }

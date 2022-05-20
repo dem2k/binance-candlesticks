@@ -11,7 +11,7 @@ import org.bson.conversions.Bson;
 
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.mongodb.client.MongoCollection;
-import common.Utils;
+import common.CommonUtils;
 
 public abstract class Updater {
 
@@ -26,8 +26,8 @@ public abstract class Updater {
     public abstract CandlestickInterval timeframe();
 
     protected Bson oneDayCriteria(LocalDate atDay) {
-        long timeFrom = Utils.toUnixTime0000(atDay);
-        long timeTo = Utils.toUnixTime2359(atDay);
+        long timeFrom = CommonUtils.toUnixTime0000(atDay);
+        long timeTo = CommonUtils.toUnixTime2359(atDay);
         return oneDayCriteria(timeFrom, timeTo);
     }
 

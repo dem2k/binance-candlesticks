@@ -8,16 +8,16 @@ import java.time.ZoneId;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import common.Utils;
+import common.CommonUtils;
 
-public class UtilsTest {
+public class CommonUtilsTest {
 
     @Test
     @Ignore
     public void test2359() {
         var atDay = LocalDate.of(2021, 8, 15)
                 .atStartOfDay(ZoneId.of("GMT")).toLocalDate();
-        long result = Utils.toUnixTime2359(atDay);
+        long result = CommonUtils.toUnixTime2359(atDay);
         assertEquals(1629071999000L, result);
     }
 
@@ -25,8 +25,8 @@ public class UtilsTest {
     public void testFromTo() {
         var atDay = LocalDate.of(2021, 8, 15)
                 .atStartOfDay(ZoneId.of("GMT")).toLocalDate();
-        long from = Utils.toUnixTime0000(atDay);
-        long to = Utils.toUnixTime2359(atDay);
+        long from = CommonUtils.toUnixTime0000(atDay);
+        long to = CommonUtils.toUnixTime2359(atDay);
         long result = to - from;
         assertEquals(86399000, result);
     }

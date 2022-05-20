@@ -5,7 +5,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-import common.Utils;
+import common.CommonUtils;
 
 public class CandleGnr {
 
@@ -14,7 +14,7 @@ public class CandleGnr {
     private String ticker, frame, time;
     private double open, high, low, close, volume, hlc3;
 
-    public static CandleGnr from(String csvLine, Utils utils) {
+    public static CandleGnr from(String csvLine, CommonUtils utils) {
         if (csvLine == null) {
             return null;
         }
