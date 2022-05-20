@@ -11,6 +11,7 @@ import org.bson.conversions.Bson;
 
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.mongodb.client.MongoCollection;
+import common.Utils;
 
 public abstract class Updater {
 

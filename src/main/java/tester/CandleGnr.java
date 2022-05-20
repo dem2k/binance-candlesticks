@@ -5,25 +5,23 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Candle {
+import common.Utils;
 
-    private Utils utils;
-    private String ticker, frame, time;
-    private double open, high, low, close, volume;
+public class CandleGnr {
 
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
-    private double hlc3;
 
-    public static Candle fromCsv(String csvLine,Utils utils) {
+    private String ticker, frame, time;
+    private double open, high, low, close, volume, hlc3;
+
+    public static CandleGnr from(String csvLine, Utils utils) {
         if (csvLine == null) {
             return null;
         }
 
-        Candle candle = new Candle();
-        // TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME
         String[] values = csvLine.split(";");
-
-        candle.utils = utils;
+        CandleGnr candle = new CandleGnr();
+        // TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME
         candle.ticker = values[0];
         candle.frame = values[1];
         candle.time = values[2];
@@ -32,13 +30,12 @@ public class Candle {
         candle.low = utils.truncateTickSize(Double.parseDouble(values[5]));
         candle.close = utils.truncateTickSize(Double.parseDouble(values[6]));
         candle.volume = Double.parseDouble(values[7]);
-        candle.hlc3 = utils.truncateTickSize( (candle.high + candle.low + candle.close) / 3);
+        candle.hlc3 = utils.truncateTickSize((candle.high + candle.low + candle.close) / 3);
 
         return candle;
     }
 
-    public double hlc3() {
-        return hlc3;
+    private CandleGnr() {
     }
 
     public String ticker() {
@@ -73,15 +70,18 @@ public class Candle {
         return volume;
     }
 
+    public double hlc3() {
+        return hlc3;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Candle)) {
+        if (!(o instanceof CandleGnr candle)) {
             return false;
         }
-        Candle candle = (Candle) o;
         return Double.compare(candle.open, open) == 0 && Double.compare(candle.high, high) == 0 && Double.compare(candle.low, low) == 0 && Double.compare(candle.close, close) == 0 && Double.compare(candle.volume, volume) == 0 && Objects.equals(ticker, candle.ticker) && Objects.equals(frame, candle.frame) && Objects.equals(time, candle.time);
     }
 

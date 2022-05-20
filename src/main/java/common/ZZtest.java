@@ -1,4 +1,4 @@
-package tester;
+package common;
 
 import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;

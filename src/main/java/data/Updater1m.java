@@ -13,6 +13,7 @@ import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
+import common.Utils;
 
 public class Updater1m extends Updater {
     
@@ -53,11 +54,11 @@ public class Updater1m extends Updater {
         return extracted1 & extracted2;
     }
 
-    private boolean extracted(LocalDate atDay, long timeFr, long timeTo, String logsufix) {
+    private boolean extracted(LocalDate atDay, long timeFr, long timeTo, String logSufix) {
         List<Candlestick> candles =
                 binance.getCandlestickBars(ticker, timeframe(), LIMIT12h, timeFr, timeTo);
         LOG.info("{} @ {} {}. received {} candles.",
-                ticker, atDay, logsufix, candles.size());
+                ticker, atDay, logSufix, candles.size());
 
         if (candles.isEmpty()) {
             return false;

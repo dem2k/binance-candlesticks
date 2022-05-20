@@ -25,10 +25,9 @@ public class Order {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Order)) {
+        if (!(o instanceof Order order)) {
             return false;
         }
-        Order order = (Order) o;
         return Double.compare(order.price, price) == 0 && side == order.side;
     }
 

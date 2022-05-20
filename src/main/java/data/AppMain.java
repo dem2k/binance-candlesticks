@@ -54,7 +54,7 @@ public class AppMain {
             }
         }
 
-        List<Exporter> exporters = createExporters(mongoDatabase,config);
+        List<Exporter> exporters = createExporters(mongoDatabase, config);
 
         for (Exporter exporter : exporters) {
             if (config.export()) {
@@ -91,7 +91,7 @@ public class AppMain {
         MongoCollection<CandleCsv> data =
                 mongoDatabase.getCollection(config.ticker() + "1m", CandleCsv.class);
 
-        return List.of(new Exporter1m(data,config.ticker()));
+        return List.of(new Exporter1m(data, config.ticker()));
     }
 
     private static void pause() {

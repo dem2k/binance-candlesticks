@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import common.Utils;
+
 public class TvChart1h implements TvChart {
 
     private Utils utils;
@@ -20,7 +22,7 @@ public class TvChart1h implements TvChart {
     private List<String> markers = new ArrayList<>();
     private List<String> gridLines = new ArrayList<>();
 
-    private Map<String, List<Candle>> series = new HashMap<>();
+    private Map<String, List<CandleGnr>> series = new HashMap<>();
 
     private String last = "";
 
@@ -34,7 +36,7 @@ public class TvChart1h implements TvChart {
     }
 
     @Override
-    public void update(Candle candle) {
+    public void update(CandleGnr candle) {
 
         if (last.equals(candle.time())) {
             return;
@@ -47,7 +49,7 @@ public class TvChart1h implements TvChart {
     }
 
     @Override
-    public void update(Order order, Candle candle) {
+    public void update(Order order, CandleGnr candle) {
         String template = "{ time: %s, position: '%s', color: '%s', shape: '%s' },\n";
         long time = truncate1h(candle.time().substring(0, 13));
         String pos = order.side() == OrderType.BUY ? "belowBar" : "aboveBar";
@@ -74,8 +76,8 @@ public class TvChart1h implements TvChart {
 
     }
 
-    private void merge(Map<String, List<Candle>> map, String key, Candle candle) {
-        List<Candle> candles =
+    private void merge(Map<String, List<CandleGnr>> map, String key, CandleGnr candle) {
+        List<CandleGnr> candles =
                 map.computeIfAbsent(key, k -> new ArrayList<>());
         candles.add(candle);
     }
@@ -127,11 +129,11 @@ public class TvChart1h implements TvChart {
 
     private String toStringOfSeries(String key) {
         long time = truncate1h(key);
-        List<Candle> candles = series.get(key);
-        Double open = candles.stream().min(Comparator.comparing(Candle::time)).map(Candle::open).orElse(0d);
-        Double high = candles.stream().max(Comparator.comparing(Candle::high)).map(Candle::high).orElse(0d);
-        Double low = candles.stream().min(Comparator.comparing(Candle::low)).map(Candle::low).orElse(0d);
-        Double close = candles.stream().max(Comparator.comparing(Candle::time)).map(Candle::close).orElse(0d);
+        List<CandleGnr> candles = series.get(key);
+        Double open = candles.stream().min(Comparator.comparing(CandleGnr::time)).map(CandleGnr::open).orElse(0d);
+        Double high = candles.stream().max(Comparator.comparing(CandleGnr::high)).map(CandleGnr::high).orElse(0d);
+        Double low = candles.stream().min(Comparator.comparing(CandleGnr::low)).map(CandleGnr::low).orElse(0d);
+        Double close = candles.stream().max(Comparator.comparing(CandleGnr::time)).map(CandleGnr::close).orElse(0d);
 
         return String.format("{ time: %s, open: %s, high: %s, low: %s, close: %s },\n",
                 time, open, high, low, close);

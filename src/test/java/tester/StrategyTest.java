@@ -2,9 +2,6 @@ package tester;
 
 import org.junit.Test;
 
-import tester.Strategy;
-import tester.Wallet;
-
 public class StrategyTest {
 
     @Test

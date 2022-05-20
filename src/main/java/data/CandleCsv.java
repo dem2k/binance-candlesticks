@@ -9,6 +9,8 @@ import com.binance.api.client.domain.market.CandlestickInterval;
 
 public class CandleCsv {
 
+    public static String CSV_HEADER = "TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME";
+
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH-mm");
 
     private String ticker;
@@ -27,6 +29,7 @@ public class CandleCsv {
     private String takerBuyQuoteAssetVolume;
 
     public CandleCsv() {
+        // used by mongo. must be.
     }
 
     public static CandleCsv from(String ticker, CandlestickInterval timeFrame, Candlestick candlestick) {
@@ -49,10 +52,6 @@ public class CandleCsv {
         this.numberOfTrades = candlestick.getNumberOfTrades().toString();
         this.takerBuyBaseAssetVolume = candlestick.getTakerBuyBaseAssetVolume();
         this.takerBuyQuoteAssetVolume = candlestick.getTakerBuyQuoteAssetVolume();
-    }
-
-    public static String CSV_HEADER() {
-        return "TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME";
     }
 
     public String toCsvValues() {

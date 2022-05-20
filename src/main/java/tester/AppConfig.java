@@ -10,9 +10,6 @@ public class AppConfig {
     @CommandLine.Option(names = "-qa", description = "Quote Asset. Default USDT.")
     private String quotAsset = "USDT";
 
-    @CommandLine.Option(names = "-csv", description = "Data File in CSV-Format.", required = true)
-    private String csvFile;
-
     @CommandLine.Option(names = "-glp", description = "Grid lowest Price.", required = true)
     private double gridLowestPrice;
 
@@ -39,7 +36,7 @@ public class AppConfig {
         return veryVerbose;
     }
 
-    public String symbol() {
+    public String ticker() {
         return baseAsset + quotAsset;
     }
 
@@ -55,10 +52,6 @@ public class AppConfig {
         return usageHelpRequested;
     }
 
-    public String csvFile() {
-        return csvFile;
-    }
-
     public double gridStepFactor() {
         return gridStepFactor;
     }
@@ -69,11 +62,6 @@ public class AppConfig {
 
     public double gridLowestPrice() {
         return gridLowestPrice;
-    }
-
-    public String csvFileWithoutExt() {
-        int dotIndex = csvFile.lastIndexOf('.');
-        return (dotIndex == -1) ? csvFile : csvFile.substring(0, dotIndex);
     }
 
 }

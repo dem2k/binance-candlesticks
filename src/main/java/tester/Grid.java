@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import common.Utils;
+
 public class Grid {
 
     private Utils utils;
@@ -76,7 +78,7 @@ public class Grid {
     }
 
     public String summary(double price) {
-        StringBuffer screen = new StringBuffer();
+        StringBuilder screen = new StringBuilder();
         orders().stream()
                 .filter(order -> order.price() > price)
                 .sorted(Comparator.comparing(Order::price).reversed())

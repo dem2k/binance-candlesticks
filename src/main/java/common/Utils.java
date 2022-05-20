@@ -1,8 +1,12 @@
-package tester;
+package common;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import com.binance.api.client.domain.general.FilterType;
 import com.binance.api.client.domain.general.SymbolFilter;
 import com.binance.api.client.domain.general.SymbolInfo;
+import tester.Order;
 
 public class Utils {
 
@@ -14,6 +18,26 @@ public class Utils {
 
     public Utils(SymbolInfo symbolInfo) {
         this.symbolInfo = symbolInfo;
+    }
+
+    public static long toUnixTime0000(LocalDate local) {
+        return local.atTime(0, 0, 0, 0)
+                .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    public static long toUnixTime1159(LocalDate local) {
+        return local.atTime(11, 59, 59, 0)
+                .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    public static long toUnixTime1200(LocalDate local) {
+        return local.atTime(12, 0, 0, 0)
+                .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    public static long toUnixTime2359(LocalDate local) {
+        return local.atTime(23, 59, 59, 0)
+                .atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public double asNumber(String str) {
@@ -57,14 +81,12 @@ public class Utils {
             tSize++;
         }
         return tSize;
-
     }
 
     public double truncateLotSize(double amount) {
         int truncteFactor = lotSizeFactor();
         amount = Math.floor(amount * truncteFactor);
         return (amount / truncteFactor);
-
     }
 
 
@@ -102,5 +124,6 @@ public class Utils {
     public static String orderPrettyString(Order order) {
         return String.format("--- %4s @ %s               #%n", order.side(), order.price());
     }
+
 
 }

@@ -38,7 +38,7 @@ public abstract class Exporter {
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(ticker() + timeframe().getIntervalId() + ".csv"));
         writer.write("sep=;");
         writer.newLine();
-        writer.write(CandleCsv.CSV_HEADER());
+        writer.write(CandleCsv.CSV_HEADER);
         writer.newLine();
 
         for (CandleCsv candle : candles) {

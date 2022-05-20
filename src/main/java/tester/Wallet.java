@@ -1,5 +1,7 @@
 package tester;
 
+import common.Utils;
+
 public class Wallet {
 
     private String baseAssetName, quoteAssetName;
@@ -75,7 +77,7 @@ public class Wallet {
     }
 
 
-    public void updatePnl(Candle candle) {
+    public void updatePnl(CandleGnr candle) {
         var total = totalAt(candle.hlc3());
         if (total < totalMin) {
             totalMin = total;

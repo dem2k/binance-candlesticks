@@ -1,12 +1,33 @@
 package tester;
 
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Sorts.ascending;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
+
 import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.SymbolInfo;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import data.CandleCsv;
+import common.Utils;
 import picocli.CommandLine;
 
 public class AppMain {
+
+    public static final String MONGO_DATABASE = "binance";
 
     private AppConfig config;
 
@@ -35,19 +56,18 @@ public class AppMain {
         BinanceApiRestClient binanceRestClient = binanceClientFactory.newRestClient();
 
         ExchangeInfo exchangeInfo = binanceRestClient.getExchangeInfo();
-        SymbolInfo symbolInfo = exchangeInfo.getSymbolInfo(config.symbol());
+        SymbolInfo symbolInfo = exchangeInfo.getSymbolInfo(config.ticker());
 
         Utils utils = new Utils(symbolInfo);
         Wallet wallet = new Wallet(config.baseAsset(), config.quotAsset());
-        CandleStreamer candles =
-                new CandleStreamer(config.csvFile(), utils);
-        Grid grid = createGrid(candles.startPrice(), config.gridLowestPrice(), config.gridHighestPrice(), config.gridStepFactor(), utils);
+
+        List<CandleGnr> candles = getCandlesFromMongo(utils);
+
+        Grid grid = createGrid(getFirstOpen(candles), config.gridLowestPrice(), config.gridHighestPrice(), config.gridStepFactor(), utils);
         TvChart tvChart = new TvChart1h(grid, utils);
         Strategy strategy = new Strategy(grid, wallet, tvChart, utils);
 
-        Candle candle = null;
-        while (candles.hasNext()) {
-            candle = candles.next();
+        for (CandleGnr candle : candles) {
             tvChart.update(candle);
             strategy.process(candle);
             wallet.updatePnl(candle);
@@ -62,40 +82,51 @@ public class AppMain {
         }
 
         strategy.finish();
-        tvChart.save(config.csvFileWithoutExt() + ".html");
+        tvChart.save(config.ticker() + "-grid-test.html");
 
         if (!config.verbose()) {
-            String summary = wallet.summary(candle.close());
+            String summary = wallet.summary(getLastClose(candles));
             System.out.println(summary);
         }
     }
 
-    private static void printFooter(Wallet wallet, double price) {
-        StringBuffer footer = new StringBuffer();
-        footer.append(wallet.summary(price));
-        footer.append(Utils.ERASE_LINE).append("\n");
-        System.out.println(footer);
+    private double getFirstOpen(List<CandleGnr> candles) {
+        CandleGnr candle =
+                candles.stream().min(Comparator.comparing(CandleGnr::time)).orElseThrow();
+        return candle.open();
     }
 
-    private static void cursorHome() {
-        System.out.print(Utils.HOME);
+    private double getLastClose(List<CandleGnr> candles) {
+        CandleGnr candle =
+                candles.stream().max(Comparator.comparing(CandleGnr::time)).orElseThrow();
+        return candle.close();
     }
 
-    private static void printHeader(Candle candle) {
-        StringBuffer header = new StringBuffer();
-        header.append("=== GRID === ").append(candle.time()).append(" ==========");
-        header.append(Utils.ERASE_LINE);
-        System.out.println(header);
-    }
+    private List<CandleGnr> getCandlesFromMongo(Utils utils) {
+        CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                .codecRegistry(codecRegistry).build();
+        MongoDatabase mongoDatabase =
+                MongoClients.create(mongoClientSettings).getDatabase(MONGO_DATABASE);
 
-    private static void printGrid(Grid grid, Wallet wallet, Candle candle) {
-        double price = candle.hlc3();
-        StringBuffer screen = new StringBuffer();
-        screen.append(grid.summary(price));
-        screen.append("========================================").append(Utils.ERASE_LINE);
-        System.out.println(screen);
-    }
+        MongoCollection<CandleCsv> data =
+                mongoDatabase.getCollection(config.ticker() + "1m", CandleCsv.class);
 
+        FindIterable<CandleCsv> candles = data.find(eq("frame", "1m"))
+                .sort(ascending("openTime"));
+
+        List<CandleGnr> result = new ArrayList<>();
+        for (CandleCsv csvCndl : candles) {
+            // TICKER;FRAME;TIME;OPEN;HIGH;LOW;CLOSE;VOLUME
+            String csvLine = csvCndl.getTicker() + ";" + csvCndl.getFrame() + ";" + csvCndl.getTime()
+                    + ";" + csvCndl.getOpen() + ";" + csvCndl.getHigh() + ";" + csvCndl.getLow()
+                    + ";" + csvCndl.getClose() + ";" + csvCndl.getVolume();
+            result.add(CandleGnr.from(csvLine, utils));
+        }
+
+        return result;
+    }
 
     private Grid createGrid(double price, double from, double to, double step, Utils utils) {
         Grid.GridBuilder builder = Grid.builder(utils, price);
@@ -106,44 +137,30 @@ public class AppMain {
         return builder.build();
     }
 
-    private static Grid gridBTC1(Utils utils) {
-        Grid.GridBuilder builder = Grid.builder(utils, 4000);
-        double price = 30000;
-        while (price < 70000) {
-            builder.add(price);
-            price += price * 0.025;
-        }
-        return builder.build();
+    private static void cursorHome() {
+        System.out.print(Utils.HOME);
     }
 
-    private static Grid createGrid2(Utils utils) {
-        Grid.GridBuilder builder = Grid.builder(utils, 4000);
-        double price = 25000;
-        while (price <= 60000) {
-            builder.add(price);
-            price += 1000;
-        }
-        return builder.build();
+    private static void printFooter(Wallet wallet, double price) {
+        StringBuilder footer = new StringBuilder();
+        footer.append(wallet.summary(price));
+        footer.append(Utils.ERASE_LINE).append("\n");
+        System.out.println(footer);
     }
 
-    private static Grid gridXLM2(Utils utils) {
-        Grid.GridBuilder builder = Grid.builder(utils, 0.1761);
-        double price = 0.10;
-        while (price <= 0.60) {
-            builder.add(price);
-            price += 0.05;
-        }
-        return builder.build();
+    private static void printHeader(CandleGnr candle) {
+        StringBuilder header = new StringBuilder();
+        header.append("=== GRID === ").append(candle.time()).append(" ==========");
+        header.append(Utils.ERASE_LINE);
+        System.out.println(header);
     }
 
-    private static Grid gridXLM(Utils utils) {
-        Grid.GridBuilder builder = Grid.builder(utils, 0.1761);
-        double price = 0.15;
-        while (price <= 0.30) {
-            builder.add(price);
-            price += 0.01;
-        }
-        return builder.build();
+    private static void printGrid(Grid grid, Wallet wallet, CandleGnr candle) {
+        double price = candle.hlc3();
+        StringBuilder screen = new StringBuilder();
+        screen.append(grid.summary(price));
+        screen.append("========================================").append(Utils.ERASE_LINE);
+        System.out.println(screen);
     }
 
 }

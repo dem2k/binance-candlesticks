@@ -1,6 +1,9 @@
 package tester;
 
+import common.Utils;
+
 public class Strategy {
+    
     private Grid grid;
     private Wallet wallet;
     private TvChart tvChart;
@@ -20,7 +23,7 @@ public class Strategy {
         this.utils = utils;
     }
 
-    public void process(Candle candle) {
+    public void process(CandleGnr candle) {
         Order buyOrder = grid.buyOrder(candle.low());
         if (buyOrder != null) {
             buyAt(buyOrder.price());

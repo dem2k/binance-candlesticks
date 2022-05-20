@@ -13,6 +13,7 @@ import com.binance.api.client.domain.market.Candlestick;
 import com.binance.api.client.domain.market.CandlestickInterval;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
+import common.Utils;
 
 public class Updater5m extends Updater {
 

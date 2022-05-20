@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import tester.Wallet;
-
 public class WalletTest {
 
     @Test
@@ -15,7 +13,6 @@ public class WalletTest {
         assertEquals(100, result, 0);
         double rem = wallet.removeBase(40);
         assertEquals(60, rem, 0);
-
     }
 
     @Test
@@ -36,5 +33,5 @@ public class WalletTest {
 
     }
 
-   
+
 }

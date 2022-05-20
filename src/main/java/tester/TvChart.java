@@ -2,9 +2,9 @@ package tester;
 
 public interface TvChart {
 
-    void update(Candle candle);
+    void update(CandleGnr candle);
 
-    void update(Order order, Candle candle);
+    void update(Order order, CandleGnr candle);
 
     void save(String fileName) throws Exception;
 }

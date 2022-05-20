@@ -4,16 +4,13 @@ import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import common.Utils;
 
 public class TvChart1m implements TvChart {
 
@@ -36,7 +33,7 @@ public class TvChart1m implements TvChart {
     }
 
     @Override
-    public void update(Candle candle) {
+    public void update(CandleGnr candle) {
 
         if (last.equals(candle.time())) {
             return;
@@ -51,7 +48,7 @@ public class TvChart1m implements TvChart {
     }
 
     @Override
-    public void update(Order order, Candle candle) {
+    public void update(Order order, CandleGnr candle) {
         String template = "{ time: %s, position: '%s', color: '%s', shape: '%s' },\n";
         long time = candle.unixTime();
         String pos = order.side() == OrderType.BUY ? "belowBar" : "aboveBar";
