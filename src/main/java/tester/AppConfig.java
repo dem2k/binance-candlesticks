@@ -37,15 +37,15 @@ public class AppConfig {
     }
 
     public String ticker() {
-        return baseAsset + quotAsset;
+        return (baseAsset + quotAsset).toUpperCase();
     }
 
     public String baseAsset() {
-        return baseAsset;
+        return baseAsset.toUpperCase();
     }
 
     public String quotAsset() {
-        return quotAsset;
+        return quotAsset.toUpperCase();
     }
 
     public boolean isUsageHelpRequested() {

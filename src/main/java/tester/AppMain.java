@@ -46,11 +46,12 @@ public class AppMain {
                 binance.getExchangeInfo().getSymbolInfo(config.ticker());
 
         var utils = new CommonUtils(symbolInfo);
-        var wallet = new Wallet(config.baseAsset(), config.quotAsset());
+        var wallet = new Wallet(config.baseAsset(), config.quotAsset(), utils);
 
         List<CandleGnr> candles = getCandlesFromMongo(utils);
+        double firstOpenPrice = getFirstOpen(candles);
 
-        var grid = createGrid(getFirstOpen(candles), config.gridLowestPrice(), config.gridHighestPrice(), config.gridStepFactor(), utils);
+        var grid = createGrid(firstOpenPrice, config.gridLowestPrice(), config.gridHighestPrice(), config.gridStepFactor(), utils);
         var tvChart = new TvChart1h(grid, utils);
         var strategy = new Strategy(grid, wallet, tvChart, utils);
 
@@ -64,17 +65,24 @@ public class AppMain {
                 if (config.veryVerbose()) {
                     printGrid(grid, wallet, candle);
                 }
-                printFooter(wallet, candle.close());
+                printFooter(wallet, firstOpenPrice, candle.close());
             }
         }
 
         strategy.finish();
-        tvChart.save(config.ticker() + "1h-grid-test.html");
+        var ext = String.format("-TEST-%s.html", System.currentTimeMillis());
+        tvChart.save(config.ticker() + ext);
 
         if (!config.verbose()) {
-            String summary = wallet.summary(getLastClose(candles));
-            System.out.println(summary);
+            printFooter(wallet, firstOpenPrice, getLastClose(candles));
         }
+    }
+
+    private static void printFooter(Wallet wallet, double openPrice, double closePrice) {
+        StringBuilder footer = new StringBuilder();
+        footer.append(wallet.summary(openPrice, closePrice));
+        footer.append(CommonUtils.ERASE_LINE).append("\n");
+        System.out.println(footer);
     }
 
     private double getFirstOpen(List<CandleGnr> candles) {
@@ -113,7 +121,6 @@ public class AppMain {
         return result;
     }
 
-
     private Grid createGrid(double price, double from, double to, double step, CommonUtils utils) {
         Grid.GridBuilder builder = Grid.builder(utils, price);
         while (from <= to) {
@@ -125,13 +132,6 @@ public class AppMain {
 
     private static void cursorHome() {
         System.out.print(CommonUtils.HOME);
-    }
-
-    private static void printFooter(Wallet wallet, double price) {
-        StringBuilder footer = new StringBuilder();
-        footer.append(wallet.summary(price));
-        footer.append(CommonUtils.ERASE_LINE).append("\n");
-        System.out.println(footer);
     }
 
     private static void printHeader(CandleGnr candle) {
